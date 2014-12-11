@@ -1,0 +1,57 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="defaultPackage" extends="struts-default">
+		<!-- 用户管理 -->
+		<action name="login" class="com.hsh.struts.UserInfoAction" method="login">
+			<result name="success">/index.jsp</result>
+			<result name="input">/login.jsp</result>
+		</action>
+		<action name="addUser" class="com.hsh.struts.UserInfoAction" method="addUser">
+			<result name="success">/login.jsp</result>
+		</action>
+		<!-- 流程管理 -->
+		<action name="processManager" class="com.hsh.struts.ProcessAction" method="processManager">
+			<result name="success">/processManager.jsp</result>
+		</action>
+		<action name="deployProcessDefinition" class="com.hsh.struts.ProcessAction" method="deploy">
+			<result name="success">/processManager.jsp</result>
+		</action>
+		<action name="deleteProcessDefinition" class="com.hsh.struts.ProcessAction" method="delete">
+			<result name="success">/processManager.jsp</result>
+		</action>
+		<action name="startProcessDefinition" class="com.hsh.struts.ProcessAction" method="start">
+			<result name="success">/index.jsp</result>
+		</action>
+		<action name="viewProcessInstances" class="com.hsh.struts.ProcessAction" method="view">
+			<result name="success">/view.jsp</result>
+		</action>
+		<action name="showPic" class="com.hsh.struts.ProcessAction" method="pic">
+			<!-- <result name="success">/view.jsp</result> -->
+			<result type="stream" name="success">
+ 				<param name="inputName">imageStream</param> 
+ 			</result>
+		</action>
+		<!-- 员工申请 -->
+		<action name="request" class="com.hsh.struts.ProcessAction" method="request">
+			<result>/request.jsp</result>
+		</action>
+		<action name="submit" class="com.hsh.struts.ProcessAction" method="submit">
+			<result>/index.jsp</result>
+		</action>
+		<!-- 经理、老板审批 -->
+		<action name="manager" class="com.hsh.struts.ProcessAction" method="managerRequerst">
+			<result>/manager.jsp</result>
+		</action>
+		<action name="boss" class="com.hsh.struts.ProcessAction" method="bossRequest">
+			<result>/boss.jsp</result>
+		</action>
+		<action name="submitManager" class="com.hsh.struts.ProcessAction" method="submitManager">
+			<result>/index.jsp</result>
+		</action>
+		<action name="submitBoss" class="com.hsh.struts.ProcessAction" method="submitBoss">
+			<result>/index.jsp</result>
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,63 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+	
+	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="configLocation"
+			value="classpath:jbpm.hibernate.cfg.xml">
+		</property>
+		<!-- 读取jbpm相关映射文件 -->
+		<property name = "mappingLocations" >
+	        <list >
+	           <value > classpath:jbpm.execution.hbm.xml </value >
+	           <value > classpath:jbpm.history.hbm.xml </value >
+	           <value > classpath:jbpm.identity.hbm.xml </value >
+	           <value > classpath:jbpm.repository.hbm.xml </value >
+	           <value > classpath:jbpm.task.hbm.xml </value >
+	        </list >
+	    </property >
+	</bean>
+	<!-- 配置事务管理器 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+		<property name="nestedTransactionAllowed" value="true" />
+	</bean>
+	<bean id="hibernateTemplate"
+		class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<!-- JBPM流程相关Bean -->
+	<bean id="springHelper" class="org.jbpm.pvm.internal.processengine.SpringHelper">
+		<property name="jbpmCfg" value="jbpm.cfg.xml" />
+	</bean>
+	<bean id="processEngine" factory-bean="springHelper"
+		factory-method="createProcessEngine" />
+	<bean id="repositoryService" factory-bean="processEngine"
+		factory-method="getRepositoryService" />
+	<bean id="executionService" factory-bean="processEngine"
+		factory-method="getExecutionService" />
+	<bean id="taskService" factory-bean="processEngine"
+		factory-method="getTaskService" />
+	<bean id="historyService" factory-bean="processEngine"
+		factory-method="getHistoryService" />
+	<bean id="identityService" factory-bean="processEngine"
+		factory-method="getIdentityService" />
+	
+	<!-- 自定义bean -->
+	<bean id="jbpmManager" class="com.hsh.entity.JBPMManagerImpl" autowire="byName"/>
+	<bean id="userInfoDao" class="com.hsh.dao.UserInfoDaoImpl" autowire="byName"/>
+	<bean id="userInfoEntity" class="com.hsh.entity.UserInfoEntityImpl" autowire="byName"/>
+</beans>
